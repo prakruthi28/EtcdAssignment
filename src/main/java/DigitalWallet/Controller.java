@@ -33,7 +33,7 @@ public class Controller {
 
         Controller(){
         try {
-                client = new EtcdClient(URI.create("http://localhost:4001/"));
+                client = new EtcdClient(URI.create("http://54.67.104.154:4001/"));
                         //this.client.set("counter", "0");
         } catch (Exception e) {
 
