@@ -1,13 +1,3 @@
-/**
- * 
- */
-package DigitalWallet;
-
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,38 +21,46 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
 import com.justinsb.etcd.EtcdClient;
 import com.justinsb.etcd.EtcdClientException;
 import com.justinsb.etcd.EtcdResult;
 import com.justinsb.etcd.*;
 
-
 @RestController
 public class Controller {
 
-	//EtcdClient client = new EtcdClient(URI.create("http://54.183.225.139:4001/"));
-	EtcdClient client = new EtcdClient(URI.create("http://127.0.0.1:4001/"));
-	
-	@RequestMapping(value = "/api/v1/counter",method = RequestMethod.GET)
+        EtcdClient client;
 
-    public @ResponseBody Integer updateCounter() throws Exception{
+        Controller(){
+        try {
+                client = new EtcdClient(URI.create("http://localhost:4001/"));
+                        //this.client.set("counter", "0");
+        } catch (Exception e) {
 
-    String key = "counter";
-
-    EtcdResult result = this.client.get(key);
-
-    Integer counterResult = Integer.parseInt(result.node.value);
-
-    counterResult++;
-
-    result = this.client.set(key, ""+counterResult);
-
-    return counterResult;       
-
-   }
-
+        }
 }
-	
-	
-	
+
+        @RequestMapping(value = "/api/v1/counter",method = RequestMethod.GET)
+        public @ResponseBody Integer updateCounter() throws Exception{
+                String key = "009266452";
+                try {
+                        EtcdResult result = this.client.get(key);
+                        Integer counterResult = Integer.parseInt(result.node.value);
+                        counterResult++;
+                        result = this.client.set(key, ""+counterResult);
+                        return counterResult;
+                }
+                catch (Exception e) {
+                        this.client.set(key, "1");
+                        return new Integer(1);
+                }
+         }
+
+        @RequestMapping(value="/api/v1/reset", method = RequestMethod.GET)
+        public @ResponseBody Integer resetCounter() throws Exception{
+                String key = "009266452";
+                EtcdResult result = this.client.set(key, "0");
+                Integer i = 0;
+                return i;
+        }
+}
