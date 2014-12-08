@@ -1,0 +1,7 @@
+external/
+.project
+.classpath
+.settings
+/target
+/src/
+/DigitalWallet/
